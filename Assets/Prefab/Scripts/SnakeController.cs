@@ -81,26 +81,22 @@ public class SnakeController : MonoBehaviour
         }
         this.transform.position = Vector3.zero;
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         //score
-        if (collision.tag == "Food")
+        if (other.CompareTag("Food"))
         {
-            AddScore();
+            ScoreManager.instance.AddScore();
             Grow();
         }
-       else if(collision.tag == "Obstacle")
+       else if(other.CompareTag("Obstacle"))
         {
             ResetState();
         }
-        else if(collision.tag == "Walls")
+        else if(other.CompareTag("Walls"))
         {
            ChangeDirection();
         }
-    }
-    public void AddScore()
-    {
-        _scoreText += 10;   
     }
 
     public void ChangeDirection()

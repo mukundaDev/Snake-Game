@@ -7,7 +7,7 @@ public class GameOver : MonoBehaviour
 {
     private void Awake()
     {
-       // transform.Find("RetryButton").GetComponent<Button_UI>().ClickFunc = ()>{
+     
             SceneManager.LoadScene(0);
     }
 

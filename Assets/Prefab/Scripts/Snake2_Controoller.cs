@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Snake2_Controoller : MonoBehaviour
@@ -106,15 +105,16 @@ public class Snake2_Controoller : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         
-       if(other.tag == "Food")
+       if(other.CompareTag("Food"))
         {
             GrowSnake();
+            ScoreManager.instance.AddScore();
         }
-        else if (other.tag == "Obstacle")
+        else if (other.CompareTag("Obstacle"))
         {
             ResetPosition();
         }
-        else if (other.tag == "Walls")
+        else if (other.CompareTag("Walls"))
         {
             ChangeMovement();
         }
