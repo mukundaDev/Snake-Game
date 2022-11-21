@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SnakeController : MonoBehaviour
 {
@@ -12,18 +9,23 @@ public class SnakeController : MonoBehaviour
     public int initialSize = 4;
     public GameObject Top, Buttom, Right, Left;
     public Camera cam;
-   
+    public GameObject gameOverScreen;
     private int _scoreText;
 
 
+   
     private void Start()
     {
         ResetState();
         ScreenRatio(cam);
-    
     }
 
     private void Update()
+    {
+        InputMethods();
+    }
+
+    private void InputMethods()
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
@@ -45,17 +47,14 @@ public class SnakeController : MonoBehaviour
 
     private void FixedUpdate()
     {
-      for(int i = _body.Count - 1; i > 0; i--)
+        for (int i = _body.Count - 1; i > 0; i--)
         {
-           _body[i].position = _body[i - 1].position;
+            _body[i].position = _body[i - 1].position;
         }
-
         this.transform.position = new Vector3(
             Mathf.Round(this.transform.position.x )+ _movement.x,
             Mathf.Round(this.transform.position.y) + _movement.y,
             0.0f);
-
-       
     }
     public void Grow()
     {
@@ -63,7 +62,6 @@ public class SnakeController : MonoBehaviour
         segment.position = _body[_body.Count - 1].position;
 
         _body.Add(segment);
-
     }
  
     private void ResetState()
@@ -71,14 +69,18 @@ public class SnakeController : MonoBehaviour
         for (int i = 1; i < _body.Count; i++)
         {
             Destroy(_body[i].gameObject);
+            gameOverScreen.SetActive(true);
+            enabled = false;
         }
         _body.Clear();
         _body.Add(this.transform);
+       
 
         for (int i = 1; i < this.initialSize; i++)
         {
             _body.Add(Instantiate(this.bodyPrefab));
         }
+        
         this.transform.position = Vector3.zero;
     }
     private void OnTriggerEnter2D(Collider2D collision)
