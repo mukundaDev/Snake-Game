@@ -102,7 +102,7 @@ public class SnakeController : MonoBehaviour
     }
     public void AddScore()
     {
-        _scoreText += 10;   
+        ScoreManager.scoreValue += 10;   
     }
 
     public void ChangeDirection()

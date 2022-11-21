@@ -1,14 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Snake2_Controoller : MonoBehaviour
 {
-    [SerializeField]
-    private float _speed;
     private List<Transform> _body = new List<Transform>();
     public Transform bodyPrefab;
-    private Vector2 _direction = Vector2.left;
+    private Vector2 _direction = Vector2.up;
     public GameObject Top, Buttom, Right, Left;
     [SerializeField]
     public int _initialSnake = 5;
@@ -67,8 +66,8 @@ public class Snake2_Controoller : MonoBehaviour
     }
     void CalculateMoment()
     {
-        float horizontalInput = transform.position.x + _direction.x * _speed;
-        float verticalInput = transform.position.y + _direction.y * _speed;
+        float horizontalInput = transform.position.x + _direction.x;
+        float verticalInput = transform.position.y + _direction.y;
         transform.position = new Vector2(horizontalInput, verticalInput);
 
        
@@ -109,6 +108,7 @@ public class Snake2_Controoller : MonoBehaviour
        if(other.tag == "Food")
         {
             GrowSnake();
+            AddScore();
         }
         else if (other.tag == "Obstacle")
         {
@@ -119,6 +119,12 @@ public class Snake2_Controoller : MonoBehaviour
             ChangeMovement();
         }
     }
+
+    private void AddScore()
+    {
+        ScoreManger2.scoreValue += 10;
+    }
+
     void GrowSnake()
     {
         Transform segment = Instantiate(this.bodyPrefab);
