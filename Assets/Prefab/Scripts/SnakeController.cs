@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class SnakeController : MonoBehaviour
@@ -58,10 +59,20 @@ public class SnakeController : MonoBehaviour
     }
     public void Grow()
     {
+       
         Transform segment = Instantiate(this.bodyPrefab);
         segment.position = _body[_body.Count - 1].position;
 
         _body.Add(segment);
+    
+    }
+    public void Burner()
+    {
+        Transform segment = Instantiate(this.bodyPrefab);
+        segment.position = _body[_body.Count - 1].position;
+      
+        //_body.Remove(segment);
+        _body.Remove(this.transform);
     }
  
     private void ResetState()
@@ -90,6 +101,10 @@ public class SnakeController : MonoBehaviour
         {
             AddScore();
             Grow();
+        }
+        if (collision.tag == "Food2")
+        {
+            Burner();
         }
        else if(collision.tag == "Obstacle")
         {
