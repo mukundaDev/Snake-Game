@@ -8,7 +8,7 @@ public class Food : MonoBehaviour
 
     private void Start()
     {
-      RandomPosition();
+        InvokeRepeating("RandomPosition", 3f, 5f);
     }
    
     private void RandomPosition()

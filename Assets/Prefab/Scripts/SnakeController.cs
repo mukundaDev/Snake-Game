@@ -68,11 +68,10 @@ public class SnakeController : MonoBehaviour
     }
     public void Burner()
     {
-        Transform segment = Instantiate(this.bodyPrefab);
-        segment.position = _body[_body.Count - 1].position;
-      
-        //_body.Remove(segment);
-        _body.Remove(this.transform);
+        Transform segment1 = Instantiate(this.bodyPrefab);
+        segment1.position = _body[_body.Count - 1].position;
+
+        _body.Remove(segment1);
     }
  
     private void ResetState()
@@ -82,6 +81,7 @@ public class SnakeController : MonoBehaviour
             Destroy(_body[i].gameObject);
             gameOverScreen.SetActive(true);
             enabled = false;
+
         }
         _body.Clear();
         _body.Add(this.transform);
@@ -104,6 +104,7 @@ public class SnakeController : MonoBehaviour
         }
         if (collision.tag == "Food2")
         {
+            RemoveScore();
             Burner();
         }
        else if(collision.tag == "Obstacle")
@@ -114,10 +115,18 @@ public class SnakeController : MonoBehaviour
         {
            ChangeDirection();
         }
+        else if (collision.tag == "Player2")
+        {
+            Destroy(collision.gameObject);
+        }
     }
     public void AddScore()
     {
         ScoreManager.scoreValue += 10;   
+    }
+    public void RemoveScore()
+    {
+        ScoreManager.scoreValue -= 5;
     }
 
     public void ChangeDirection()

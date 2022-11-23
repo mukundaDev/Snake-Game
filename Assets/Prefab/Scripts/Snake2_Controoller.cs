@@ -114,6 +114,10 @@ public class Snake2_Controoller : MonoBehaviour
         {
             ResetPosition();
         }
+       else if(other.tag == "Player1")
+        {
+            Destroy(other.gameObject);
+        }
         else if (other.tag == "Walls")
         {
             ChangeMovement();
