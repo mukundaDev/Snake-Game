@@ -11,6 +11,7 @@ public class Snake2_Controoller : MonoBehaviour
     public GameObject Top, Buttom, Right, Left;
     [SerializeField]
     public int _initialSnake = 5;
+    public GameObject gameOverScreen;
 
 
 
@@ -24,6 +25,8 @@ public class Snake2_Controoller : MonoBehaviour
         for (int i = 1; i < _body.Count; i++)
         {
             Destroy(_body[i].gameObject);
+            enabled = false;
+            gameOverScreen.SetActive(true);
         }
         _body.Clear();
         _body.Add(this.transform);
@@ -72,6 +75,7 @@ public class Snake2_Controoller : MonoBehaviour
 
        
     }
+
     private void ChangeMovement()
     {
             if (_direction == Vector2.left)
@@ -100,7 +104,19 @@ public class Snake2_Controoller : MonoBehaviour
                                                      Mathf.Round(Top.transform.position.y) + _direction.y,
                                                      0.0f);
             }
-        }
+    }
+    public void Burner()
+    {
+       // _body.RemoveAt(_body.Count - 1);
+    }
+    public void RemoveScore()
+    {
+        ScoreManager.scoreValue -= 5;
+    }
+    private void AddScore()
+    {
+        ScoreManger2.scoreValue += 10;
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -109,9 +125,15 @@ public class Snake2_Controoller : MonoBehaviour
         {
             GrowSnake();
             AddScore();
-        }
+       }
+       if (other.tag == "Food2")
+       {
+            RemoveScore();
+            Burner();
+       }
         else if (other.tag == "Obstacle")
         {
+
             ResetPosition();
         }
        else if(other.tag == "Player1")
@@ -122,11 +144,6 @@ public class Snake2_Controoller : MonoBehaviour
         {
             ChangeMovement();
         }
-    }
-
-    private void AddScore()
-    {
-        ScoreManger2.scoreValue += 10;
     }
 
     void GrowSnake()

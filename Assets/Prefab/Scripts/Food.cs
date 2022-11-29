@@ -5,7 +5,7 @@ using UnityEngine;
 public class Food : MonoBehaviour
 {
     public BoxCollider2D gridArea;
-
+   
     private void Start()
     {
         InvokeRepeating("RandomPosition", 3f, 5f);
@@ -17,16 +17,20 @@ public class Food : MonoBehaviour
 
         float x = Random.Range(bounds.min.x, bounds.max.x);
         float y = Random.Range(bounds.min.y, bounds.max.y);
-
+        
         this.transform.position = new Vector3(Mathf.Round(x), Mathf.Round(y),0.0f);
     }
 
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Player")
+        if(collision.tag == "Player1")
         {
             RandomPosition();   
+        }
+        if(collision.tag == "Player2")
+        {
+            RandomPosition();
         }
     }
 }

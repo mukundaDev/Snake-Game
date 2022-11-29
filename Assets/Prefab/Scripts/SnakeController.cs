@@ -12,9 +12,14 @@ public class SnakeController : MonoBehaviour
     public Camera cam;
     public GameObject gameOverScreen;
     private int _scoreText;
+    [SerializeField]
+    public float _speed;
+    ////variable for IsShieldACtive
+    public bool isShieldActive = false;
+    [SerializeField]
+    public GameObject shieldPrefab;
+    
 
-
-   
     private void Start()
     {
         ResetState();
@@ -28,6 +33,7 @@ public class SnakeController : MonoBehaviour
 
     private void InputMethods()
     {
+        
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             _movement = Vector2.up;
@@ -53,46 +59,49 @@ public class SnakeController : MonoBehaviour
             _body[i].position = _body[i - 1].position;
         }
         this.transform.position = new Vector3(
-            Mathf.Round(this.transform.position.x )+ _movement.x,
-            Mathf.Round(this.transform.position.y) + _movement.y,
-            0.0f);
+            Mathf.Round(this.transform.position.x) + _movement.x,
+            Mathf.Round(this.transform.position.y)  + _movement.y,
+            0.0f) ;
+      
     }
     public void Grow()
     {
-       
+       if (isShieldActive == true)
+        {
+            Instantiate(shieldPrefab, transform.position + new Vector3(Mathf.Round(this.transform.position.x),
+            Mathf.Round(this.transform.position.y),
+            0.0f) , Quaternion.identity);
+        }
         Transform segment = Instantiate(this.bodyPrefab);
         segment.position = _body[_body.Count - 1].position;
 
         _body.Add(segment);
-    
     }
     public void Burner()
     {
-        Transform segment1 = Instantiate(this.bodyPrefab);
-        segment1.position = _body[_body.Count - 1].position;
 
-        _body.Remove(segment1);
+        //_body.RemoveAt(_body.Count - 1);
+       
+       
     }
  
     private void ResetState()
     {
-        for (int i = 1; i < _body.Count; i++)
-        {
-            Destroy(_body[i].gameObject);
-            gameOverScreen.SetActive(true);
-            enabled = false;
+          for (int i = 1; i < _body.Count; i++)
+            {
+                Destroy(_body[i].gameObject);
+                enabled = false;
+                gameOverScreen.SetActive(true);
+            }
+            _body.Clear();
+            _body.Add(this.transform);
 
-        }
-        _body.Clear();
-        _body.Add(this.transform);
-       
+            for (int i = 1; i < this.initialSize; i++)
+            {
+                _body.Add(Instantiate(this.bodyPrefab));
+            }
+            this.transform.position = Vector3.zero;
 
-        for (int i = 1; i < this.initialSize; i++)
-        {
-            _body.Add(Instantiate(this.bodyPrefab));
-        }
-        
-        this.transform.position = Vector3.zero;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -118,6 +127,7 @@ public class SnakeController : MonoBehaviour
         else if (collision.tag == "Player2")
         {
             Destroy(collision.gameObject);
+            ResetState();
         }
     }
     public void AddScore()
